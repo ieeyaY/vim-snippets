@@ -151,36 +151,25 @@ endglobal
 
 post_jump "if snip.tabstop == 0 : split_line(snip.tabstops[4].current_text)"
 snippet head "File Header" b
-/******************************************************************************
-* File:             `!p snip.rv = fn`
-*
-* Author:           ${2}  
-* Created:          `date +%m/%d/%y` 
-* Description:      ${4:${VISUAL}}
-*****************************************************************************/
+/**
+ * @file: `!p snip.rv = fn`
+ * @author: ${2}
+ * @created: `date +%m/%d/%y`
+ * @description: ${4:${VISUAL}}
+ */
 ${0}
 endsnippet
 
 post_jump "if snip.tabstop == 0 : split_line(snip.tabstops[4].current_text)"
 snippet func "Function Header" 
-/******************************************************************************
-* Function:         $1
-* Description:      ${4:${VISUAL}}
-* Where:`!p 
-snip.rv = ""
-snip >> 2
-
-args = get_args(t[2])
-if args:
-	for arg in args:
-		snip.rv += '\n' + '*' + ' '*19 + arg + ' - TODO'
-snip << 2
-`
-* Return:           $5
-* Error:            $6
-*****************************************************************************/
-${1}($2){
-	${0}
+/**
+ * @brief: ${4:brief}
+ * @param: `!p write_docstring_args(t[3],snip)`
+ * @return: `!p snip.rv = t[1]`
+ */
+${1:ReturnType} ${2:FunctionName}(${3:param})
+{
+	${0:FunctionBody}
 }
 endsnippet
 # vim:ft=snippets:
