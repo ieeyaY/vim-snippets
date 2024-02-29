@@ -23,6 +23,20 @@ def printf_expand_args(snip):
 	# convert them into tabstops
 	snip.expand_anon(output)
 
+def write_docstring_args(arglist, snip):
+	args = str(arglist).split(',')
+
+	if len(args) > 1:
+		c = 0
+		for arg in args:
+			if c == 0:
+				snip.rv += arg
+				c = 1
+			else:
+				snip += '* @param %s' % arg.strip()
+	else:
+		snip.rv = args[0]
+
 endglobal
 
 # ==============
@@ -129,10 +143,6 @@ ${1:void} ${2:function_name}($3)
 }
 endsnippet
 
-snippet fund "function declaration" b
-${1:void} ${2:function_name}($3);
-endsnippet
-
 global !p
 def split_line(text):
 	import textwrap
@@ -147,25 +157,54 @@ def split_line(text):
 def get_args(arglist):
 	args = [arg.strip() for arg in arglist.split(',') if arg]
 	return args
+
+def return_val(returntype, snip):
+	if "int" in returntype:
+		snip.rv = " * @retval"
+	else:
+		snip.rv = " * @return"
+
+def return_dscrp(returntype, snip):
+	if "int" in returntype:
+		snip.rv = "0 OK"
+	else:
+		snip.rv = "Return"
 endglobal
 
 post_jump "if snip.tabstop == 0 : split_line(snip.tabstops[4].current_text)"
 snippet head "File Header" b
 /**
- * @file: `!p snip.rv = fn`
- * @author: ${2}
- * @created: `date +%m/%d/%y`
- * @description: ${4:${VISUAL}}
+ * @headerfile `!p snip.rv = fn`
+ * @brief ${1}
+ *
+ * @details
+ * ${2:${VISUAL}}
  */
 ${0}
 endsnippet
 
 post_jump "if snip.tabstop == 0 : split_line(snip.tabstops[4].current_text)"
-snippet func "Function Header" 
+snippet fund "Function Declaration" 
 /**
- * @brief: ${4:brief}
- * @param: `!p write_docstring_args(t[3],snip)`
- * @return: `!p snip.rv = t[1]`
+ * @brief ${4:brief}
+ *
+ * @param `!p write_docstring_args(t[3],snip)`
+
+ * @return `!p snip.rv = t[1]`
+ */
+${1:ReturnType} ${2:FunctionName}(${3:param});
+endsnippet
+
+
+post_jump "if snip.tabstop == 0 : split_line(snip.tabstops[4].current_text)"
+snippet func "Function Definition" 
+/**
+ * @details
+ * ${5:details}
+ *
+ * @param `!p write_docstring_args(t[3],snip)`
+ *
+ * `!p return_val(t[1], snip)` ${4:{VISUAL `!p return_dscrp(t[1], snip)`}}
  */
 ${1:ReturnType} ${2:FunctionName}(${3:param})
 {
