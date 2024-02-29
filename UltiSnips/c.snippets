@@ -33,7 +33,7 @@ def write_docstring_args(arglist, snip):
 				snip.rv += arg
 				c = 1
 			else:
-				snip += '* @param %s' % arg.strip()
+				snip += ' * @param %s' % arg.strip()
 	else:
 		snip.rv = args[0]
 
@@ -160,9 +160,9 @@ def get_args(arglist):
 
 def return_val(returntype, snip):
 	if "int" in returntype:
-		snip.rv = " * @retval"
+		snip.rv = "@retval"
 	else:
-		snip.rv = " * @return"
+		snip.rv = "@return"
 
 def return_dscrp(returntype, snip):
 	if "int" in returntype:
@@ -200,7 +200,7 @@ post_jump "if snip.tabstop == 0 : split_line(snip.tabstops[4].current_text)"
 snippet func "Function Definition" 
 /**
  * @details
- * ${5:details}
+ * ${4:details}
  *
  * @param `!p write_docstring_args(t[3],snip)`
  *
