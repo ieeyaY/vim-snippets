@@ -159,7 +159,7 @@ def get_args(arglist):
 	return args
 
 def return_val(returntype, snip):
-	if "int" in returntype:
+	if "int" in str(returntype):
 		snip.rv = "@retval"
 	else:
 		snip.rv = "@return"
@@ -204,7 +204,7 @@ snippet func "Function Definition"
  *
  * @param `!p write_docstring_args(t[3],snip)`
  *
- * `!p return_val(t[1], snip)` ${4:{VISUAL `!p return_dscrp(t[1], snip)`}}
+ * `!p return_val(t[1], snip)` ${4:{VISUAL:`!p return_dscrp(t[1], snip)`}}
  */
 ${1:ReturnType} ${2:FunctionName}(${3:param})
 {
